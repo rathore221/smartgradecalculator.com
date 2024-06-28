@@ -1,0 +1,370 @@
+<!--PROJECT: SMART GRADE CALCULATOR
+
+PURPOSE: 
+
+    This website aims to help users calculate their grades by asking 
+    for their current grades, the weight of each grade component, and 
+    the grades they have achieved. Furthermore, this program can calculate 
+    what grade is needed to achieve a desired overall grade by using 
+    a grading scheme provided by the user.
+
+    This program hopes to assist university and college 
+    students into achieving their academic goals by providing 
+    an accessible and easy-to-use tool for calculating grades. 
+    By understanding their current academic standing, students 
+    can set realistic and achievable goals. This calculator 
+    aims to empower students to take control of their academic 
+    journey, make informed decisions, and strive for excellence.
+
+-->
+<!--CREDENTIALS
+
+CREATOR: AARON RATHORE
+CONTACT: aaronrthre@gmail.com
+TIME CREATED: 06/20/2024
+
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Grade Calculator</title>
+    <style>
+
+        /** Adjust the main components of the site.**/
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            align-items: left;
+            padding: 20px;
+            gap: 20px;
+        }
+        
+        /** Adjust the title box **/
+        #titleBox {
+            width: 9%;
+            max-width: 1000px;
+            background-color: #204fc7; 
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            text-align: left;
+        }
+        #titleBox h1 {
+            font-size: 1.5em;
+            font-style: italic;
+            font-weight: bold;
+            color: #ffffff; 
+            margin: 0;
+        }
+
+        /** Adjust the location of the 3 boxes **/
+        #mainContainer {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            max-width: 1200px;
+        }
+
+        /** Adjust the main calculator component boxes. **/
+        #calculator {
+            flex: 1;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-right: 20px;
+        }
+
+        /** Adjust the rest of the component boxes. **/
+        #rightContainer {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        #desiredGrade, #gradingScheme {
+            padding: 20px;
+            background-color: #ffffff; /* Beige background */
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        /** Spacing between buttons and liens. **/
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .form-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .form-row input {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            flex: 1;
+        }
+        .form-row input:not(:first-child) {
+            margin-left: 10px;
+        }
+        .button-group {
+            display: flex;
+            gap: 10px;
+        }
+        .form-group button {
+            background-color: #5cb85c;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+        .form-group button:hover {
+            background-color: #4cae4c;
+        }
+        #result {
+            margin-top: 20px;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+
+        /** Calculate button. **/ 
+        .big-button {
+            width: 100%;
+            padding: 20px;
+            font-size: 1.5em;
+            background-color: #204fc7;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        .big-button:hover {
+            background-color: #025aa5;
+        }
+
+        /** Instruction box **/
+        #instructions {
+            width: 84%;
+            max-width: 1200px;
+            padding: 20px;
+            background-color: #f5f5dc; /* Beige background */
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <div id="titleBox">
+        <h1>Smart Grade Calculator.</h1>
+    </div>
+    <div id="mainContainer">
+        <div id="calculator">
+            <h2>Grade Calculator</h2>
+            <form id="gradeForm">
+                <div id="sections">
+                    <div class="form-group section">
+                        <div class="form-row">
+                            <label for="sectionTitle0">Section Title:</label>
+                            <input type="text" id="sectionTitle0" class="sectionTitle" required>
+                        </div>
+                        <div class="form-row">
+                            <label for="sectionWeight0">Section Weight (%):</label>
+                            <input type="number" id="sectionWeight0" class="sectionWeight" required>
+                            <label for="sectionGrade0" style="margin-left: 10px;">Section Grade (%):</label>
+                            <input type="number" id="sectionGrade0" class="sectionGrade">
+                        </div>
+                        <div class="button-group">
+                            <button type="button" class="remove-button" onclick="removeSection(this)">Remove Section</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group button-group">
+                    <button type="button" onclick="addSection()">Add Section</button>
+                </div>
+                <button type="submit" class="big-button">Calculate Grade</button>
+            </form>
+            <div id="result"></div>
+        </div>
+
+        <div id="rightContainer">
+            <div id="desiredGrade">
+                <h2>Desired Grade</h2>
+                <form id="desiredGradeForm">
+                    <div class="form-group">
+                        <label for="desiredGradeTitle">Desired Grade:</label>
+                        <input type="text" id="desiredGradeTitle">
+                    </div>
+                </form>
+            </div>
+
+            <div id="gradingScheme">
+                <h2>Grading Scheme</h2>
+                <form id="schemeForm">
+                    <div id="schemes">
+                        <div class="form-group scheme">
+                            <div class="form-row">
+                                <label for="gradeAplus">Grade:</label>
+                                <input type="text" id="gradeAplus" class="gradeTitle" value="A+">
+                                <label for="percentageAplus" style="margin-left: 10px;">Percentage (%):</label>
+                                <input type="number" id="percentageAplus" class="gradePercentage">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group button-group">
+                        <button type="button" onclick="addScheme()">Add Grade Scheme</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div id="instructions">
+        <p>
+            Instructions:
+            <ul>
+                <li>If all fields are filled except the section grade of one of the sections, the calculated result will print your calculated grade, as well as how much you need in that specific section to get your desired grade.</li>
+                <li>If no grading scheme and no desired grade are inputted, the calculated result will only print the grade you have in the class.</li>
+                <li>If all fields are provided, the calculator will print both your current grade and the letter grade you have achieved.</li>
+            </ul>
+        </p>
+    </div>
+
+    <script>
+        let sectionCount = 1;
+        let schemeCount = 1;
+
+        function addSection() {
+            const sections = document.getElementById('sections');
+            const newSection = document.createElement('div');
+            newSection.classList.add('form-group', 'section');
+            newSection.innerHTML = `
+                <div class="form-row">
+                    <label for="sectionTitle${sectionCount}">Section Title</label>
+                    <input type="text" id="sectionTitle${sectionCount}" class="sectionTitle" required>
+                </div>
+                <div class="form-row">
+                    <label for="sectionWeight${sectionCount}">Section Weight (%)</label>
+                    <input type="number" id="sectionWeight${sectionCount}" class="sectionWeight" required>
+                    <label for="sectionGrade${sectionCount}" style="margin-left: 10px;">Section Grade (%)</label>
+                    <input type="number" id="sectionGrade${sectionCount}" class="sectionGrade">
+                </div>
+                <div class="button-group">
+                    <button type="button" class="remove-button" onclick="removeSection(this)">Remove Section</button>
+                </div>
+            `;
+            sections.appendChild(newSection);
+            sectionCount++;
+        }
+
+        /** Adding grading schemes **/
+        function addScheme() {
+            const schemes = document.getElementById('schemes');
+            const newScheme = document.createElement('div');
+            newScheme.classList.add('form-group', 'scheme');
+            newScheme.innerHTML = `
+                <div class="form-row">
+                    <label for="grade${schemeCount}">Grade</label>
+                    <input type="text" id="grade${schemeCount}" class="gradeTitle" required>
+                    <label for="percentage${schemeCount}" style="margin-left: 10px;">Percentage (%)</label>
+                    <input type="number" id="percentage${schemeCount}" class="gradePercentage" required>
+                </div>
+            `;
+            schemes.appendChild(newScheme);
+            schemeCount++;
+        }
+
+        /** Remove section  **/
+        function removeSection(button) {
+            const section = button.parentElement.parentElement;
+            section.remove();
+        }
+
+        document.getElementById('gradeForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            calculateGrade();
+        });
+
+        /** Calculate the final grade. **/
+        function calculateGrade() {
+            const sectionTitles = document.querySelectorAll('.sectionTitle');
+            const sectionWeights = document.querySelectorAll('.sectionWeight');
+            const sectionGrades = document.querySelectorAll('.sectionGrade');
+            const gradeTitles = document.querySelectorAll('.gradeTitle');
+            const gradePercentages = document.querySelectorAll('.gradePercentage');
+            const desiredGradeTitle = document.getElementById('desiredGradeTitle').value;
+            let totalWeight = 0;
+            let weightedGradeSum = 0;
+            let incompleteSection = null;
+            let incompleteWeight = 0;
+            let incompleteTitle = '';
+            let resultText = '';
+
+            for (let i = 0; i < sectionTitles.length; i++) {
+                const weight = parseFloat(sectionWeights[i].value);
+                const grade = parseFloat(sectionGrades[i].value);
+                if (isNaN(grade)) {
+                    incompleteSection = i;
+                    incompleteWeight = weight;
+                    incompleteTitle = sectionTitles[i].value;
+                } else {
+                    weightedGradeSum += (weight * grade) / 100;
+                }
+                totalWeight += weight;
+            }
+
+            if (totalWeight !== 100) {
+                document.getElementById('result').textContent = 'Total weight must be 100%.';
+                return;
+            }
+
+            if (incompleteSection !== null) {
+                if (desiredGradeTitle) {
+                    let desiredPercentage = null;
+                    for (let i = 0; i < gradeTitles.length; i++) {
+                        if (gradeTitles[i].value === desiredGradeTitle) {
+                            desiredPercentage = parseFloat(gradePercentages[i].value);
+                            break;
+                        }
+                    }
+
+                    if (desiredPercentage !== null) {
+                        const neededGrade = (desiredPercentage - weightedGradeSum) / (incompleteWeight / 100);
+                        resultText = `To achieve a ${desiredGradeTitle}, you need to score ${neededGrade.toFixed(2)}% in the ${incompleteTitle}.`;
+                    } else {
+                        resultText = `Desired grade ${desiredGradeTitle} is not defined in the grading scheme.`;
+                    }
+                } else {
+                    resultText = 'Please enter a desired grade.';
+                }
+            } else {
+                let finalGrade = weightedGradeSum;
+                let letterGrade = '';
+
+                // Determine letter grade based on grading scheme
+                for (let i = 0; i < gradeTitles.length; i++) {
+                    if (finalGrade >= parseFloat(gradePercentages[i].value)) {
+                        letterGrade = gradeTitles[i].value;
+                        break;
+                    }
+                }
+
+                resultText = `Your calculated grade is ${finalGrade.toFixed(2)}% (${letterGrade}).`;
+            }
+
+            document.getElementById('result').textContent = resultText;
+        }
+    </script>
+</body>
+</html>
